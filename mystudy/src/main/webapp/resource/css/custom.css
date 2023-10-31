@@ -1,0 +1,23 @@
+@charset "euc-kr";
+/* CSS Document */
+
+@font-face {
+    font-family: 'KoPubWorld Dotum Bold';
+    src: url('../font/KoPubWorld Dotum Bold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'KoPubWorld Dotum Light';
+	src: url('../font/KoPubWorld Dotum Light.ttf') format('truetype');
+}
+
+.navbar-brand, h1, h2, h3, h4 {
+	font-family: 'KoPubWorld Dotum Bold';
+	font-size: 25px;
+}
+body {
+	font-family: 'KoPubWorld Dotum Light';
+	font-size: 17px;
+	overflow-x: hidden;
+	min-width: 1280px;
+}
