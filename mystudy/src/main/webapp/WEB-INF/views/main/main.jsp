@@ -10,6 +10,7 @@
 <meta charset="UTF-8">
 <title>admin main page</title>
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <link rel="stylesheet" href="./resource/css/bootstrap.min.css">
 <link rel="stylesheet" href="./resource/css/custom.css">
 <link rel="stylesheet" href="./resource/css/index.css">
@@ -175,7 +176,7 @@ function modal() {
     		</tr>
     		<tr>
     			<td>금일 가입자수</td>
-    			<td>?명</td>
+    			<td>${todayReg} 명</td>
     		</tr>
     		<tr>
     			<td>금일 탈퇴자수</td>
@@ -205,81 +206,8 @@ function modal() {
     </div>
     
     	<div class="box2">
-    	<p style="margin: 20px 0 0 15px;">일자별 요약</p>
-    	<table class="summary">
-    		<tr style="color:gray; text-align: center;">
-    			<td>일자</td>
-    			<td>주문수</td>
-    			<td>매출액</td>
-    			<td>방문자수</td>
-    			<td>가입자수</td>
-    			<td>문의</td>
-    		</tr>
-    		<tr style="background-color:skyblue;">
-    			<td>2023-10-29</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    		</tr>
-    		<tr>
-    			<td>2023-10-29</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    		</tr>
-    		<tr>
-    			<td>2023-10-29</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    		</tr>
-    		<tr>
-    			<td>2023-10-29</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    		</tr>
-    		<tr>
-    			<td>2023-10-29</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    		</tr>
-    		<tr>
-    			<td>2023-10-29</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    		</tr>
-    		<tr>
-    			<td>2023-10-29</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    		</tr>
-    		<tr>
-    			<td>최근 7일간 합계</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    			<td>0</td>
-    		</tr>
-    	</table>
+    		<canvas id="myChart">
+    		</canvas>
     	</div>
     	
     	<!-- 
@@ -299,5 +227,53 @@ function modal() {
 
 
 </body>
+
+<script>
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [
+        	'${label}'
+        	/* 'Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange' */
+        	],
+        datasets: [{
+            label: '회원가입자 수',
+            data: [
+            	/* 12, 19, 3, 5, 2, 3 */
+            	${data}
+            	],
+            backgroundColor: [
+                /* 'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)' */
+            ],
+            borderColor: [
+                 'rgba(135, 206, 235, 1)',
+                'rgba(135, 206, 235, 1)',
+                'rgba(135, 206, 235, 1)',
+                'rgba(135, 206, 235, 1)',
+                'rgba(135, 206, 235, 1)',
+                'rgba(135, 206, 235, 1)',
+                'rgba(135, 206, 235, 1)',
+                'rgba(135, 206, 235, 1)',
+                'rgba(135, 206, 235, 1)'
+                
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
 
 </html>
