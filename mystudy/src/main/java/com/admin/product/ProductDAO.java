@@ -107,7 +107,7 @@ public class ProductDAO {
 				
 				sb.append(" ( ");
 				sb.append(" INSTR(productName, ?) >= 1 ");
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");
 			}
 			
 
@@ -134,7 +134,7 @@ public class ProductDAO {
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");
 				
 			}
 			
@@ -159,7 +159,7 @@ public class ProductDAO {
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");
 			}
 			
 			// String expirationDateStart,
@@ -180,7 +180,7 @@ public class ProductDAO {
 					sb.append(" expirationDate >= TO_DATE(?,'YYYY-MM-DD') AND expirationDate <= TO_DATE(?,'YYYY-MM-DD') ");
 					
 				}
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");
 			}
 			
 			
@@ -213,7 +213,7 @@ public class ProductDAO {
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");			
 			}
 			
 			
@@ -231,7 +231,7 @@ public class ProductDAO {
 				if( alcoholPercentKwd.contains("alcohol3") ) {
 					sb.append(" ( alcoholPercent >= 30.00 ) OR ");
 				}
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");
 			}
 			
 			// List<String> productTasteKwd
@@ -250,11 +250,11 @@ public class ProductDAO {
 				if( productTasteKwd.contains("탄산") ) {
 					sb.append(" ( INSTR(productTaste, '탄산') >= 1 ) OR ");
 				}
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");
 			}
 			
-			if( sb.lastIndexOf(" ) AND ( ") == sb.length()-9 ) {
-	            sb.delete(sb.lastIndexOf(" ) AND ( "), sb.length());
+			if( sb.lastIndexOf(" AND ") == sb.length()-5 ) {
+	            sb.delete(sb.lastIndexOf("AND "), sb.length());
 	        }
 			
 			pstmt = conn.prepareStatement(sb.toString());
@@ -377,7 +377,7 @@ public class ProductDAO {
 			if( productNameKwd != null ) {
 				sb.append(" ( ");
 				sb.append(" INSTR(productName, ?) >= 1 ");
-				sb.append(" ) AND (	");
+				sb.append(" ) AND	");
 			}
 				
 			
@@ -404,7 +404,7 @@ public class ProductDAO {
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");
 			}
 			
 			
@@ -428,7 +428,7 @@ public class ProductDAO {
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");
 			}
 			
 			// String expirationDateStart,
@@ -449,7 +449,7 @@ public class ProductDAO {
 					sb.append(" expirationDate >= TO_DATE(?,'YYYY-MM-DD') AND expirationDate <= TO_DATE(?,'YYYY-MM-DD') ");
 					
 				}
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");
 			}
 			
 			
@@ -481,7 +481,7 @@ public class ProductDAO {
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");
 			}
 			
 			
@@ -499,7 +499,7 @@ public class ProductDAO {
 				if( alcoholPercentKwd.contains("alcohol3") ) {
 					sb.append(" ( alcoholPercent >= 30.00 ) OR ");
 				}
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");
 			}
 			
 			// List<String> productTasteKwd
@@ -518,16 +518,19 @@ public class ProductDAO {
 				if( productTasteKwd.contains("탄산") ) {
 					sb.append(" ( INSTR(productTaste, '탄산') >= 1 ) OR ");
 				}
-				sb.append(" ) AND ( ");
+				sb.append(" ) AND ");
 			}
+			
+			if( sb.lastIndexOf(" AND ") == sb.length()-5 ) {
+	            sb.delete(sb.lastIndexOf("AND "), sb.length());
+	        }
+			
 			sb.append(" ORDER BY productCode DESC ");
 			sb.append(" OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ");
 			
 			
 			// AND삭제 연산
-			if( sb.lastIndexOf(" ) AND ( ") == sb.length()-9 ) {
-	            sb.delete(sb.lastIndexOf(" ) AND ( "), sb.length());
-	        }
+			
 			
 			pstmt = conn.prepareStatement(sb.toString());
 			
@@ -537,25 +540,33 @@ public class ProductDAO {
 					// 최소일자만 있을 때
 					pstmt.setString(1, expirationDateStart);
 					pstmt.setString(2, "9999-09-09");
+					pstmt.setInt(3, offset);
+					pstmt.setInt(4, size);
 					
 				} else if ( expirationDateStart == null && expirationDateEnd != null ) {
 					// 최대일자만 있을 때
 					pstmt.setString(1, "1111-11-11");
 					pstmt.setString(2, expirationDateEnd);
+					pstmt.setInt(3, offset);
+					pstmt.setInt(4, size);
 					
 				} else {
 					// 모두 있을 때
 					pstmt.setString(1, expirationDateStart);
 					pstmt.setString(2, expirationDateEnd);
+					pstmt.setInt(3, offset);
+					pstmt.setInt(4, size);
 					
 				}		
 
+			} else {
+				pstmt.setInt(1, offset);
+				pstmt.setInt(2, size);
 			}
 			
 			
 			
-			pstmt.setInt(3, offset);
-			pstmt.setInt(4, size);
+			
 			
 			rs = pstmt.executeQuery();
 			

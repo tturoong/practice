@@ -110,14 +110,14 @@ public class ProductServlet extends MyServlet {
 			if(offset < 0) offset = 0;
 			
 			List<ProductDTO> list = null;
-			if (productNameKwd != null
-					&& productPriceKwd != null
-					&& volumeKwd != null
-					&& expirationDateStart != null
-					&& expirationDateEnd != null
-					&& productCategoryKwd != null
-					&& alcoholPercentKwd != null
-					&& productTasteKwd != null) {
+			if (productNameKwd == null
+					&& productPriceKwd == null
+					&& volumeKwd == null
+					&& expirationDateStart == null
+					&& expirationDateEnd == null
+					&& productCategoryKwd == null
+					&& alcoholPercentKwd == null
+					&& productTasteKwd == null) {
 				list = dao.listProduct(offset, size);
 			} else {
 				// List<String> kwdlist = new ArrayList<String>();
@@ -125,38 +125,38 @@ public class ProductServlet extends MyServlet {
 				
 				List<String> productPriceKwdlist = new ArrayList<String>();
 				if(productPriceKwd != null) {
-				for(String s : productPriceKwd) {
-					productPriceKwdlist.add(s);
+					for(String s : productPriceKwd) {
+						productPriceKwdlist.add(s);
 					}
 				}
 				
 				List<String> volumeKwdlist = new ArrayList<String>();
 				if(volumeKwd != null) {
-				for(String s : volumeKwd) {
-					volumeKwdlist.add(s);
+					for(String s : volumeKwd) {
+						volumeKwdlist.add(s);
 					}
 				}
 				
 				
 				List<String> productCategoryKwdlist = new ArrayList<String>();
 				if(productCategoryKwd != null) {
-				for(String s : productCategoryKwd) {
-					productCategoryKwdlist.add(s);
-				}
+					for(String s : productCategoryKwd) {
+						productCategoryKwdlist.add(s);
+					}
 				}
 				
 				List<String> alcoholPercentKwdlist = new ArrayList<String>();
 				if(alcoholPercentKwd != null) {
-				for(String s : alcoholPercentKwd) {
-					alcoholPercentKwdlist.add(s);
-				}
+					for(String s : alcoholPercentKwd) {
+						alcoholPercentKwdlist.add(s);
+					}
 				}
 				
 				List<String> productTasteKwdlist = new ArrayList<String>();
 				if(productTasteKwd != null) {
-				for(String s : productTasteKwd) {
-					productTasteKwdlist.add(s);
-				}
+					for(String s : productTasteKwd) {
+						productTasteKwdlist.add(s);
+					}
 				}
 				
 				list = dao.listProduct(offset, size, productNameKwd, productPriceKwdlist, volumeKwdlist, 
@@ -208,7 +208,7 @@ public class ProductServlet extends MyServlet {
 		}
 
 		// JSP로 포워딩
-//		viewPage(req, resp, "product/list.jsp");
+		forward(req, resp, "/WEB-INF/views/admin/product/list.jsp");
 	}
 	
 	protected void writeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

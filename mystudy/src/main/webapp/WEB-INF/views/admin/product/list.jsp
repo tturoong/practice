@@ -260,24 +260,24 @@ function deleteList() {
 							<td>${dto.volume}</td>
 							<td>${dto.breweryPage}</td>
 							<td>${dto.productSubject}</td>
-							<td>${dto.ExpirationDate}</td>
+							<td>${dto.expirationDate}</td>
 							<td>${dto.productStorage}</td>
 							<td>${dto.productCategory}</td>
-							<td>${dto.hashtag}</td>
+							<td>${dto.hashTag}</td>
 							<td>${dto.alcoholPercent}</td>
 							<td>${dto.productTaste}</td>
 							<td>${dto.productPerson}</td>
 							<td>${dto.inventory}</td>
-							<td>${dto.extinctornot}</td>
+							<td>${dto.extinctOrNot}</td>
 							
 							
-							<!-- 
-							<td class="left">
+							 
+							<%-- <td class="left">
 								<c:forEach var="n" begin="1" end="${dto.depth }">&nbsp;&nbsp;</c:forEach>
 								<c:if test="${dto.depth!=0}">└&nbsp;</c:if>
 								<a href="${articleUrl}&boardNum=${dto.boardNum}">${dto.subject}</a>
-							</td>
-							 -->
+							</td> --%>
+							 
 						</tr>
 					</c:forEach>
 				</tbody>
