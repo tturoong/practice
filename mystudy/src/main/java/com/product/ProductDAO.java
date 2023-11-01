@@ -13,6 +13,7 @@ import com.util.DBUtil;
 public class ProductDAO {
 	private Connection conn = DBConn.getConnection();
 	
+	// 상품 등록
 	public void insertProduct(ProductDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
 		StringBuilder sb = new StringBuilder();
@@ -60,6 +61,7 @@ public class ProductDAO {
 		}
 	}
 	
+	// 데이터 개수
 	public int dataCount() {
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -122,9 +124,10 @@ public class ProductDAO {
 					sb.append(" ( productPrice >= 30000 AND productPrice < 50000 ) OR ");
 				}
 				// p4 5이상				
-				if( productPriceKwd.contains("p1") ) {
+				if( productPriceKwd.contains("p4") ) {
 					sb.append(" ( productPrice >= 50000 ) OR ");
 				}
+				//
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
@@ -287,7 +290,7 @@ public class ProductDAO {
 	
 	
 	
-	
+	// 게시물 리스트
 	public List<ProductDTO> listProduct(int offset, int size) {
 		List<ProductDTO> list = new ArrayList<ProductDTO>();
 		PreparedStatement pstmt = null;
@@ -329,7 +332,7 @@ public class ProductDAO {
 				dto.setPrice(rs.getInt("price"));
 				dto.setVolume(rs.getInt("volume"));
 				
-				
+				list.add(dto);
 			
 			}
 			
@@ -629,6 +632,7 @@ public class ProductDAO {
 		}
 		
 	}
+
 	
 	
 	

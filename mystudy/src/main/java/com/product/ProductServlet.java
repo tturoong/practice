@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
 import com.util.MyServlet;
 import com.util.MyUtil;
 
@@ -24,6 +25,18 @@ public class ProductServlet extends MyServlet {
 
 		String uri = req.getRequestURI();
 		
+		
+		// 세션 정보
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("admin");
+
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
+		
+		
+		// uri에 따른 작업 구분
 		if(uri.indexOf("list.do") != -1) {
 			list(req,resp);
 		} else if (uri.indexOf("write.do") != -1) {
@@ -47,6 +60,7 @@ public class ProductServlet extends MyServlet {
 		String cp = req.getContextPath();
 		
 		try {
+			// 넘어온 페이지
 			String page = req.getParameter("page");
 			int current_page = 1;
 			if (page != null) {
@@ -54,24 +68,30 @@ public class ProductServlet extends MyServlet {
 			}
 			
 			// 검색
-			String schType = req.getParameter("schType");
-			String kwd = req.getParameter("kwd");
-			if (schType == null) {
-				schType = "all";
-				kwd = "";
-			}
-
-			// GET 방식인 경우 디코딩
-			if (req.getMethod().equalsIgnoreCase("GET")) {
-				kwd = URLDecoder.decode(kwd, "utf-8");
-			}
+			String productNameKwd = req.getParameter("productNameKwd");
+			String productPriceKwd = req.getParameter("productNameKwd");
+			String volumeKwd = req.getParameter("volumeKwd");
+			String expirationDateStart = req.getParameter("expirationDateStart");
+			String expirationDateEnd = req.getParameter("expirationDateEnd");
+			String productCategoryKwd = req.getParameter("productCategoryKwd");
+			String alcoholPercentKwd = req.getParameter("alcoholPercentKwd");
+			String productTasteKwd = req.getParameter("productTasteKwd");
 
 			// 전체 데이터 개수
 			int dataCount;
-			if (kwd.length() == 0) {
+			if (productNameKwd.length() == 0
+					&& productPriceKwd.length() == 0
+					&& volumeKwd.length() == 0
+					&& expirationDateStart.length() == 0
+					&& expirationDateEnd.length() == 0
+					&& productCategoryKwd.length() == 0
+					&& alcoholPercentKwd.length() == 0
+					&& productTasteKwd.length() == 0) {
 				dataCount = dao.dataCount();
 			} else {
-				dataCount = dao.dataCount(schType, null, null, kwd, kwd, null, null, null);
+				dataCount = dao.dataCount(productNameKwd, productPriceKwd, volumeKwd, 
+						expirationDateStart, expirationDateEnd, productCategoryKwd,
+						alcoholPercentKwd, productTasteKwd);
 			}
 			
 			// 전체 페이지 수
@@ -80,29 +100,40 @@ public class ProductServlet extends MyServlet {
 			if (current_page > total_page) {
 				current_page = total_page;
 			}
-			/*
+			
 			// 게시물 가져오기
 			int offset = (current_page - 1) * size;
 			if(offset < 0) offset = 0;
 			
 			List<ProductDTO> list = null;
-			if (kwd.length() == 0) {
+			if (productNameKwd.length() != 0
+					&& productPriceKwd.length() != 0
+					&& volumeKwd.length() != 0
+					&& expirationDateStart.length() != 0
+					&& expirationDateEnd.length() != 0
+					&& productCategoryKwd.length() != 0
+					&& alcoholPercentKwd.length() != 0
+					&& productTasteKwd.length() != 0) {
 				list = dao.listProduct(offset, size);
 			} else {
-				list = dao.listProduct(offset, size, schType, kwd);
+				list = dao.listProduct(offset, size, productNameKwd, productPriceKwd, 
+						 volumeKwd, expirationDateStart, expirationDateEnd, 
+						 productCategoryKwd, alcoholPercentKwd, 
+						 productTasteKwd);
 			}
-
+			
+			// 이게 뭔지
 			String query = "";
 			if (kwd.length() != 0) {
 				query = "schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
 			}
-
+			
 			// 페이징 처리
-			String listUrl = cp + "/productadmin/list.do";
-			String articleUrl = cp + "/bbs/article.do?page=" + current_page;
+			String listUrl = cp + "/product/list.do";
+			//String articleUrl = cp + "/bbs/article.do?page=" + current_page;
 			if (query.length() != 0) {
 				listUrl += "?" + query;
-				articleUrl += "&" + query;
+				//articleUrl += "&" + query;
 			}
 			
 
@@ -114,11 +145,19 @@ public class ProductServlet extends MyServlet {
 			req.setAttribute("total_page", total_page);
 			req.setAttribute("dataCount", dataCount);
 			req.setAttribute("size", size);
-			req.setAttribute("articleUrl", articleUrl);
+			// req.setAttribute("articleUrl", articleUrl);
 			req.setAttribute("paging", paging);
-			req.setAttribute("schType", schType);
-			req.setAttribute("kwd", kwd);
-			*/
+			// req.setAttribute("schType", schType);
+			// req.setAttribute("kwd", kwd);
+			req.setAttribute("productNameKwd", productNameKwd);
+			req.setAttribute("productPriceKwd", productPriceKwd);
+			req.setAttribute("volumeKwd", volumeKwd);
+			req.setAttribute("expirationDateStart", expirationDateStart);
+			req.setAttribute("expirationDateEnd", expirationDateEnd);
+			req.setAttribute("productCategoryKwd", productCategoryKwd);
+			req.setAttribute("alcoholPercentKwd", alcoholPercentKwd);
+			req.setAttribute("productTasteKwd", productTasteKwd);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -146,8 +185,6 @@ public class ProductServlet extends MyServlet {
 			ProductDTO dto = new ProductDTO();
 
 			// 파라미터
-			
-			dto.setProductCode(req.getParameter("productName"), req.getParameter("breweryPage"));
 			dto.setProductName(req.getParameter("productName"));
 			dto.setProductPrice(Integer.parseInt(req.getParameter("productPrice")));
 			dto.setProductSubject(req.getParameter("productSubject"));
@@ -170,7 +207,7 @@ public class ProductServlet extends MyServlet {
 	}
 	
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 수정 폼
+		// 수정 폼 // article을 보지않고 수정하는 방법
 		ProductDAO dao = new ProductDAO();
 
 		String cp = req.getContextPath();
@@ -263,7 +300,7 @@ public class ProductServlet extends MyServlet {
 			dao.deleteProduct(productCode);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}  
 
 		resp.sendRedirect(cp + "/product/list.do?" + query);
 	}
