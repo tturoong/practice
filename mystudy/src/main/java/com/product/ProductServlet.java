@@ -1,15 +1,15 @@
 package com.product;
 
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 
 import com.util.MyServlet;
@@ -25,7 +25,7 @@ public class ProductServlet extends MyServlet {
 
 		String uri = req.getRequestURI();
 		
-		
+		/*
 		// 세션 정보
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("admin");
@@ -34,7 +34,7 @@ public class ProductServlet extends MyServlet {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 			return;
 		}
-		
+		*/
 		
 		// uri에 따른 작업 구분
 		if(uri.indexOf("list.do") != -1) {
@@ -42,7 +42,8 @@ public class ProductServlet extends MyServlet {
 		} else if (uri.indexOf("write.do") != -1) {
 			writeForm(req,resp);
 		} else if (uri.indexOf("write_ok.do") != -1) {
-			writeSubmit(req,resp);
+			writeSubmit(req,resp); }
+			/*
 		} else if (uri.indexOf("update.do") != -1) {
 			updateForm(req,resp);
 		} else if (uri.indexOf("update_ok.do") != -1) {
@@ -50,6 +51,7 @@ public class ProductServlet extends MyServlet {
 		} else if (uri.indexOf("delete.do") != -1) {
 			delete(req, resp);
 		}
+		*/
 	}
 	
 	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -68,30 +70,31 @@ public class ProductServlet extends MyServlet {
 			}
 			
 			// 검색
-			String productNameKwd = req.getParameter("productNameKwd");
-			String productPriceKwd = req.getParameter("productNameKwd");
-			String volumeKwd = req.getParameter("volumeKwd");
+			String productNameKwd = req.getParameter("productName");
+			String[] productPriceKwd = req.getParameterValues("price");
+			String[] volumeKwd = req.getParameterValues("volume");
 			String expirationDateStart = req.getParameter("expirationDateStart");
 			String expirationDateEnd = req.getParameter("expirationDateEnd");
-			String productCategoryKwd = req.getParameter("productCategoryKwd");
-			String alcoholPercentKwd = req.getParameter("alcoholPercentKwd");
-			String productTasteKwd = req.getParameter("productTasteKwd");
+			String[] productCategoryKwd = req.getParameterValues("category");
+			String[] alcoholPercentKwd = req.getParameterValues("alcohol");
+			String[] productTasteKwd = req.getParameterValues("taste");
 
 			// 전체 데이터 개수
 			int dataCount;
-			if (productNameKwd.length() == 0
-					&& productPriceKwd.length() == 0
-					&& volumeKwd.length() == 0
-					&& expirationDateStart.length() == 0
-					&& expirationDateEnd.length() == 0
-					&& productCategoryKwd.length() == 0
-					&& alcoholPercentKwd.length() == 0
-					&& productTasteKwd.length() == 0) {
+			if (productNameKwd == null
+					&& productPriceKwd == null
+					&& volumeKwd == null
+					&& expirationDateStart == null
+					&& expirationDateEnd == null
+					&& productCategoryKwd == null
+					&& alcoholPercentKwd == null
+					&& productTasteKwd == null) {
 				dataCount = dao.dataCount();
 			} else {
-				dataCount = dao.dataCount(productNameKwd, productPriceKwd, volumeKwd, 
-						expirationDateStart, expirationDateEnd, productCategoryKwd,
-						alcoholPercentKwd, productTasteKwd);
+				
+				dataCount = dao.dataCount(productNameKwd, Arrays.asList(productPriceKwd), Arrays.asList(volumeKwd), 
+						expirationDateStart, expirationDateEnd,Arrays.asList(productCategoryKwd),
+						Arrays.asList(alcoholPercentKwd), Arrays.asList(productTasteKwd));
 			}
 			
 			// 전체 페이지 수
@@ -101,41 +104,83 @@ public class ProductServlet extends MyServlet {
 				current_page = total_page;
 			}
 			
+			
 			// 게시물 가져오기
 			int offset = (current_page - 1) * size;
 			if(offset < 0) offset = 0;
 			
 			List<ProductDTO> list = null;
-			if (productNameKwd.length() != 0
-					&& productPriceKwd.length() != 0
-					&& volumeKwd.length() != 0
-					&& expirationDateStart.length() != 0
-					&& expirationDateEnd.length() != 0
-					&& productCategoryKwd.length() != 0
-					&& alcoholPercentKwd.length() != 0
-					&& productTasteKwd.length() != 0) {
+			if (productNameKwd != null
+					&& productPriceKwd != null
+					&& volumeKwd != null
+					&& expirationDateStart != null
+					&& expirationDateEnd != null
+					&& productCategoryKwd != null
+					&& alcoholPercentKwd != null
+					&& productTasteKwd != null) {
 				list = dao.listProduct(offset, size);
 			} else {
-				list = dao.listProduct(offset, size, productNameKwd, productPriceKwd, 
-						 volumeKwd, expirationDateStart, expirationDateEnd, 
-						 productCategoryKwd, alcoholPercentKwd, 
-						 productTasteKwd);
+				// List<String> kwdlist = new ArrayList<String>();
+				// System.out.println(productTasteKwd.getClass());
+				
+				List<String> productPriceKwdlist = new ArrayList<String>();
+				if(productPriceKwd != null) {
+				for(String s : productPriceKwd) {
+					productPriceKwdlist.add(s);
+					}
+				}
+				
+				List<String> volumeKwdlist = new ArrayList<String>();
+				if(volumeKwd != null) {
+				for(String s : volumeKwd) {
+					volumeKwdlist.add(s);
+					}
+				}
+				
+				
+				List<String> productCategoryKwdlist = new ArrayList<String>();
+				if(productCategoryKwd != null) {
+				for(String s : productCategoryKwd) {
+					productCategoryKwdlist.add(s);
+				}
+				}
+				
+				List<String> alcoholPercentKwdlist = new ArrayList<String>();
+				if(alcoholPercentKwd != null) {
+				for(String s : alcoholPercentKwd) {
+					alcoholPercentKwdlist.add(s);
+				}
+				}
+				
+				List<String> productTasteKwdlist = new ArrayList<String>();
+				if(productTasteKwd != null) {
+				for(String s : productTasteKwd) {
+					productTasteKwdlist.add(s);
+				}
+				}
+				
+				list = dao.listProduct(offset, size, productNameKwd, productPriceKwdlist, volumeKwdlist, 
+						expirationDateStart, expirationDateEnd, productCategoryKwdlist,
+						alcoholPercentKwdlist, productTasteKwdlist);
+			
 			}
 			
-			// 이게 뭔지
+			/*
 			String query = "";
-			if (kwd.length() != 0) {
-				query = "schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
+			if (productNameKwd.length() != 0) {
+				query = "productNameKwd=" + URLEncoder.encode(productNameKwd, "utf-8");
 			}
+			*/
 			
 			// 페이징 처리
 			String listUrl = cp + "/product/list.do";
 			//String articleUrl = cp + "/bbs/article.do?page=" + current_page;
+			/*
 			if (query.length() != 0) {
 				listUrl += "?" + query;
 				//articleUrl += "&" + query;
 			}
-			
+			*/
 
 			String paging = util.paging(current_page, total_page, listUrl);
 
@@ -205,7 +250,7 @@ public class ProductServlet extends MyServlet {
 
 		viewPage(req, resp, "redirect:/product/list.do");
 	}
-	
+	/*
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 수정 폼 // article을 보지않고 수정하는 방법
 		ProductDAO dao = new ProductDAO();
@@ -304,4 +349,5 @@ public class ProductServlet extends MyServlet {
 
 		resp.sendRedirect(cp + "/product/list.do?" + query);
 	}
+	*/
 }
