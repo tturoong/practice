@@ -74,19 +74,19 @@ th, td { padding: 10px; }
 		<div class="box1">
 			<table class="dashbox">
 				<tr>
-					<th><i class="fa-solid fa-store"></i>&nbsp; 회원 가입자 통계</th>
+					<th onclick="location.href='${pageContext.request.contextPath}/statistic/graph.do';"><i class="fa-solid fa-store"></i>&nbsp; 회원 가입자 통계</th>
 				</tr>
 			</table>
 			
 			<table class="dashbox">
 				<tr>
-					<th><i class="fa-solid fa-truck-fast"></i>&nbsp; 매출 관리 </th>
+					<th onclick="location.href='${pageContext.request.contextPath}/statistic/sales.do';"><i class="fa-solid fa-truck-fast"></i>&nbsp; 매출 관리 </th>
 				</tr>
 			</table>
 			
 			<table class="dashbox">
 				<tr>
-					<th><i class="fa-solid fa-newspaper">&nbsp; 접속자 수 관리</i></th>
+					<th onclick=""><i class="fa-solid fa-newspaper">&nbsp; 접속자 수 관리</i></th>
 				</tr>
 			</table>
 		</div>
@@ -103,7 +103,7 @@ th, td { padding: 10px; }
 							<select name = "date" id = "date">
 								<option value="1" ${ date == "1" ? "selected":"0"}>일별</option>
 								<option value="2" ${ date == "2" ? "selected":"0"}>월별</option>
-								<option value="3" ${ date == "3" ? "selected":"0"}>연별</option>
+<%-- 								<option value="3" ${ date == "3" ? "selected":"0"}>연별</option> --%>
 							</select>
 							<button type="submit" onclick="location.href='${pageContext.request.contextPath}/statistic/graph.do';"> 전송 </button>
 						</td>
@@ -138,7 +138,7 @@ const myChart = new Chart(ctx, {
         	/* 'Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange' */
         	],
         datasets: [{
-            label: '회원가입자 수',
+            label: '가입자 수 (단위 : 명)',
             data: [
             	/* 12, 19, 3, 5, 2, 3 */
             	${data}
