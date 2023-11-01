@@ -89,7 +89,7 @@ public class StatisticServlet extends MyServlet {
 			e.printStackTrace();
 		}
 		
-		forward(req, resp,"/WEB-INF/views/main/graph.jsp");
+		forward(req, resp,"/WEB-INF/views/statistic/graph.jsp");
 		
 	}
 }

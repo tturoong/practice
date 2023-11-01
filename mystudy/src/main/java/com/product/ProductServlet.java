@@ -12,8 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.util.MyServlet;
+import com.util.MyUtil;
 
-@WebServlet("/productadmin/*")
+@WebServlet("/product/*")
 public class ProductServlet extends MyServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -70,7 +71,7 @@ public class ProductServlet extends MyServlet {
 			if (kwd.length() == 0) {
 				dataCount = dao.dataCount();
 			} else {
-				dataCount = dao.dataCount(schType, kwd);
+				dataCount = dao.dataCount(schType, null, null, kwd, kwd, null, null, null);
 			}
 			
 			// 전체 페이지 수
@@ -145,18 +146,19 @@ public class ProductServlet extends MyServlet {
 			ProductDTO dto = new ProductDTO();
 
 			// 파라미터
-			dto.setProductCode(req.getParameter("productCode"));
+			
+			dto.setProductCode(req.getParameter("productName"), req.getParameter("breweryPage"));
 			dto.setProductName(req.getParameter("productName"));
-			dto.setProductPrice(req.getParameter("productPrice"));
+			dto.setProductPrice(Integer.parseInt(req.getParameter("productPrice")));
 			dto.setProductSubject(req.getParameter("productSubject"));
 			dto.setExpirationDate(req.getParameter("expirationDate"));
 			dto.setBreweryPage(req.getParameter("breweryPage"));
 			dto.setProductCategory(req.getParameter("productCategory"));
-			dto.setHasttag(req.getParameter("hashtag"));
-			dto.setAlcoholPercent(req.getParameter("alcoholPercent"));
+			dto.setHashTag(req.getParameter("hashtag"));
+			dto.setAlcoholPercent(Double.parseDouble(req.getParameter("alcoholPercent")));
 			dto.setProductTaste(req.getParameter("productTaste"));
 			dto.setProductPerson(req.getParameter("productPerson"));
-			dto.setInventory(req.getParameter("inventory"));
+			dto.setInventory(Integer.parseInt(req.getParameter("inventory")));
 			dto.setImage(req.getParameter("image"));
 
 			dao.insertProduct(dto);
@@ -180,7 +182,7 @@ public class ProductServlet extends MyServlet {
 			ProductDTO dto = dao.findById(num);
 
 			if (dto == null) {
-				resp.sendRedirect(cp + "/productadmin/list.do?page=" + page);
+				resp.sendRedirect(cp + "/product/list.do?page=" + page);
 				return;
 			}
 
@@ -213,21 +215,21 @@ public class ProductServlet extends MyServlet {
 		try {
 			ProductDTO dto = new ProductDTO();
 			
-			dto.setProductCode(req.getParameter("productCode"));
+			dto.setProductCode(req.getParameter("productName"), req.getParameter("breweryPage"));
 			dto.setProductName(req.getParameter("productName"));
-			dto.setProductPrice(req.getParameter("productPrice"));
+			dto.setProductPrice(Integer.parseInt(req.getParameter("productPrice")));
 			dto.setProductSubject(req.getParameter("productSubject"));
 			dto.setExpirationDate(req.getParameter("expirationDate"));
 			dto.setBreweryPage(req.getParameter("breweryPage"));
 			dto.setProductCategory(req.getParameter("productCategory"));
-			dto.setHasttag(req.getParameter("hashtag"));
-			dto.setAlcoholPercent(req.getParameter("alcoholPercent"));
+			dto.setHashTag(req.getParameter("hashtag"));
+			dto.setAlcoholPercent(Double.parseDouble(req.getParameter("alcoholPercent")));
 			dto.setProductTaste(req.getParameter("productTaste"));
 			dto.setProductPerson(req.getParameter("productPerson"));
-			dto.setInventory(req.getParameter("inventory"));
+			dto.setInventory(Integer.parseInt(req.getParameter("inventory")));
 			dto.setImage(req.getParameter("image"));
 
-			dao.updateBoard(dto);
+			dao.updateProduct(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -245,7 +247,7 @@ public class ProductServlet extends MyServlet {
 		String query = "page=" + page;
 
 		try {
-			long productCode = Long.parseLong(req.getParameter("productCode"));
+			String productCode = req.getParameter("productCode");
 			String schType = req.getParameter("schType");
 			String kwd = req.getParameter("kwd");
 			if (schType == null) {
@@ -258,7 +260,7 @@ public class ProductServlet extends MyServlet {
 				query += "&schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "UTF-8");
 			}
 
-			dao.deleteBoard(productCode);
+			dao.deleteProduct(productCode);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
