@@ -100,18 +100,21 @@ public class ProductDAO {
 		StringBuilder sb = new StringBuilder();
 		
 		try {
-			sb.append("SELECT COUNT(*) FROM product ");
+			sb.append("SELECT COUNT(*) FROM product WHERE ");
 
 			// 제품 이름 검색
 			if( productNameKwd != null ) {
-				sb.append(" WHERE INSTR(productName, ?) >= 1 ");
+				
+				sb.append(" ( ");
+				sb.append(" INSTR(productName, ?) >= 1 ");
+				sb.append(" ) AND ( ");
 			}
 			
 
 			// 제품 가격 검색
 			if( productPriceKwd != null ) {
 				// p1 1만이하
-				sb.append(" AND ( ");
+				sb.append(" ( ");
 				if( productPriceKwd.contains("p1") ) {
 					sb.append(" ( productPrice <= 10000 ) OR ");
 				}
@@ -131,14 +134,15 @@ public class ProductDAO {
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
-				sb.append(" ) ");
+				sb.append(" ) AND ( ");
+				
 			}
 			
 			
 			// List<String> volumeKwd, 
 			// 용량 검색
 			if( volumeKwd != null) {
-				sb.append(" AND ( ");
+				sb.append(" ( ");
 				if( volumeKwd.contains("b1") ) {
 					// b1 200ml 미만 
 					sb.append(" ( volume < 200 ) OR ");
@@ -155,14 +159,14 @@ public class ProductDAO {
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
-				sb.append(" ) ");
+				sb.append(" ) AND ( ");
 			}
 			
 			// String expirationDateStart,
 			// String expirationDateEnd, 
 			// 유통기한 검색
 			if( expirationDateStart != null || expirationDateEnd != null ) {
-				sb.append(" AND ( ");
+				sb.append(" ( ");
 				if( expirationDateStart != null && expirationDateEnd == null ) {
 //					// 최소일자만 있을 때
 //					sb.append(" expirationDate >= TO_DATE(?,'YYYY-MM-DD') ");
@@ -175,15 +179,17 @@ public class ProductDAO {
 //					// 모두 있을 때
 					sb.append(" expirationDate >= TO_DATE(?,'YYYY-MM-DD') AND expirationDate <= TO_DATE(?,'YYYY-MM-DD') ");
 					
-				}		
+				}
+				sb.append(" ) AND ( ");
 			}
 			
 			
 			// List<String> productCategoryKwd,
 			// 제품 카테고리
 			if( productCategoryKwd != null ) {
+				sb.append(" ( ");
+			
 				// 탁주
-				sb.append(" AND ( ");
 				if( productCategoryKwd.contains("탁주") ) {
 					sb.append(" ( INSTR(productCategory, '탁주') >= 1 ) OR ");
 				}
@@ -207,14 +213,14 @@ public class ProductDAO {
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
-				sb.append(" ) ");
+				sb.append(" ) AND ( ");
 			}
 			
 			
 			// List<String> alcoholPercentKwd,
 			// 도수 검색
 			if( alcoholPercentKwd != null) {
-				sb.append(" AND ( ");
+				sb.append(" ( ");
 				// 10도 미만
 				if( alcoholPercentKwd.contains("alcohol1") ) {
 					sb.append(" ( alcoholPercent < 10.00 ) OR ");
@@ -225,13 +231,13 @@ public class ProductDAO {
 				if( alcoholPercentKwd.contains("alcohol3") ) {
 					sb.append(" ( alcoholPercent >= 30.00 ) OR ");
 				}
-				sb.append(" ) ");
+				sb.append(" ) AND ( ");
 			}
 			
 			// List<String> productTasteKwd
 			// 맛 검색
 			if( productTasteKwd != null) {
-				sb.append(" AND ( ");
+				sb.append(" ( ");
 				if( productTasteKwd.contains("단맛") ) {
 					sb.append(" ( INSTR(productTaste, '단맛') >= 1 ) OR ");
 				}
@@ -244,13 +250,17 @@ public class ProductDAO {
 				if( productTasteKwd.contains("탄산") ) {
 					sb.append(" ( INSTR(productTaste, '탄산') >= 1 ) OR ");
 				}
-				sb.append(" ) ");
+				sb.append(" ) AND ( ");
 			}
 			
-			pstmt = conn.prepareStatement(sb.toString());
+			if( sb.lastIndexOf(" ) AND ( ") == sb.length()-9 ) {
+	            sb.delete(sb.lastIndexOf(" ) AND ( "), sb.length());
+	        }
 			
+			pstmt = conn.prepareStatement(sb.toString());
+			//유통기한
 			if( expirationDateStart != null || expirationDateEnd != null ) {
-				sb.append(" AND ( ");
+				
 				if( expirationDateStart != null && expirationDateEnd == null ) {
 					// 최소일자만 있을 때
 					pstmt.setString(1, expirationDateStart);
@@ -266,7 +276,7 @@ public class ProductDAO {
 					pstmt.setString(1, expirationDateStart);
 					pstmt.setString(2, expirationDateEnd);
 					
-				}		
+				}
 			}
 			
 			rs = pstmt.executeQuery();
@@ -303,7 +313,7 @@ public class ProductDAO {
 			sb.append(" hashTag, alcoholPercent, productTaste, productPerson, inventory, ");
 			sb.append(" image, extinctOrNot, price, volume ");
 			sb.append(" FROM product ");
-			sb.append(" ORDER BY num DESC ");
+			sb.append(" ORDER BY productCode DESC ");
 			sb.append(" OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ");
 			
 			pstmt = conn.prepareStatement(sb.toString());
@@ -315,7 +325,7 @@ public class ProductDAO {
 			
 			while( rs.next() ) {
 				ProductDTO dto = new ProductDTO();
-				dto.setProductCode(null, null);
+				dto.setProductCode(rs.getString("productCode"));
 				dto.setProductName(rs.getString("productName"));
 				dto.setProductPrice(rs.getInt("productPrice"));
 				dto.setProductSubject(rs.getString("productSubject"));
@@ -361,18 +371,21 @@ public class ProductDAO {
 			sb.append(" productSubject, expirationDate, productStorage, productCategory, ");
 			sb.append(" hashTag, alcoholPercent, productTaste, productPerson, inventory, ");
 			sb.append(" image, extinctOrNot, price, volume ");
-			sb.append(" FROM product ");
+			sb.append(" FROM product WHERE ");
 			
 			// 제품 이름 검색
 			if( productNameKwd != null ) {
-				sb.append(" WHERE INSTR(productName, ?) >= 1 ");
+				sb.append(" ( ");
+				sb.append(" INSTR(productName, ?) >= 1 ");
+				sb.append(" ) AND (	");
 			}
+				
 			
 
 			// 제품 가격 검색
 			if( productPriceKwd != null ) {
+				sb.append(" ( ");
 				// p1 1만이하
-				sb.append(" AND ( ");
 				if( productPriceKwd.contains("p1") ) {
 					sb.append(" ( productPrice <= 10000 ) OR ");
 				}
@@ -391,14 +404,14 @@ public class ProductDAO {
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
-				sb.append(" ) ");
+				sb.append(" ) AND ( ");
 			}
 			
 			
 			// List<String> volumeKwd, 
 			// 용량 검색
 			if( volumeKwd != null) {
-				sb.append(" AND ( ");
+				sb.append(" ( ");
 				if( volumeKwd.contains("b1") ) {
 					// b1 200ml 미만 
 					sb.append(" ( volume < 200 ) OR ");
@@ -415,14 +428,14 @@ public class ProductDAO {
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
-				sb.append(" ) ");
+				sb.append(" ) AND ( ");
 			}
 			
 			// String expirationDateStart,
 			// String expirationDateEnd, 
 			// 유통기한 검색
 			if( expirationDateStart != null || expirationDateEnd != null ) {
-				sb.append(" AND ( ");
+				sb.append(" ( ");
 				if( expirationDateStart != null && expirationDateEnd == null ) {
 //								// 최소일자만 있을 때
 //								sb.append(" expirationDate >= TO_DATE(?,'YYYY-MM-DD') ");
@@ -435,7 +448,8 @@ public class ProductDAO {
 //								// 모두 있을 때
 					sb.append(" expirationDate >= TO_DATE(?,'YYYY-MM-DD') AND expirationDate <= TO_DATE(?,'YYYY-MM-DD') ");
 					
-				}		
+				}
+				sb.append(" ) AND ( ");
 			}
 			
 			
@@ -443,7 +457,7 @@ public class ProductDAO {
 			// 제품 카테고리
 			if( productCategoryKwd != null ) {
 				// 탁주
-				sb.append(" AND ( ");
+				sb.append(" ( ");
 				if( productCategoryKwd.contains("탁주") ) {
 					sb.append(" ( INSTR(productCategory, '탁주') >= 1 ) OR ");
 				}
@@ -467,14 +481,14 @@ public class ProductDAO {
 				if( sb.lastIndexOf("OR") == sb.length()-3 ) {
 					sb.delete(sb.lastIndexOf("OR"), sb.length());
 				}
-				sb.append(" ) ");
+				sb.append(" ) AND ( ");
 			}
 			
 			
 			// List<String> alcoholPercentKwd,
 			// 도수 검색
 			if( alcoholPercentKwd != null) {
-				sb.append(" AND ( ");
+				sb.append(" ( ");
 				// 10도 미만
 				if( alcoholPercentKwd.contains("alcohol1") ) {
 					sb.append(" ( alcoholPercent < 10.00 ) OR ");
@@ -485,13 +499,13 @@ public class ProductDAO {
 				if( alcoholPercentKwd.contains("alcohol3") ) {
 					sb.append(" ( alcoholPercent >= 30.00 ) OR ");
 				}
-				sb.append(" ) ");
+				sb.append(" ) AND ( ");
 			}
 			
 			// List<String> productTasteKwd
 			// 맛 검색
 			if( productTasteKwd != null) {
-				sb.append(" AND ( ");
+				sb.append(" ( ");
 				if( productTasteKwd.contains("단맛") ) {
 					sb.append(" ( INSTR(productTaste, '단맛') >= 1 ) OR ");
 				}
@@ -504,15 +518,21 @@ public class ProductDAO {
 				if( productTasteKwd.contains("탄산") ) {
 					sb.append(" ( INSTR(productTaste, '탄산') >= 1 ) OR ");
 				}
-				sb.append(" ) ");
+				sb.append(" ) AND ( ");
 			}
-			sb.append(" ORDER BY num DESC ");
+			sb.append(" ORDER BY productCode DESC ");
 			sb.append(" OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ");
+			
+			
+			// AND삭제 연산
+			if( sb.lastIndexOf(" ) AND ( ") == sb.length()-9 ) {
+	            sb.delete(sb.lastIndexOf(" ) AND ( "), sb.length());
+	        }
 			
 			pstmt = conn.prepareStatement(sb.toString());
 			
 			if( expirationDateStart != null || expirationDateEnd != null ) {
-				sb.append(" AND ( ");
+
 				if( expirationDateStart != null && expirationDateEnd == null ) {
 					// 최소일자만 있을 때
 					pstmt.setString(1, expirationDateStart);
@@ -529,7 +549,10 @@ public class ProductDAO {
 					pstmt.setString(2, expirationDateEnd);
 					
 				}		
+
 			}
+			
+			
 			
 			pstmt.setInt(3, offset);
 			pstmt.setInt(4, size);
@@ -538,7 +561,7 @@ public class ProductDAO {
 			
 			while( rs.next() ) {
 				ProductDTO dto = new ProductDTO();
-				dto.setProductCode(null, null);
+				 dto.setProductCode(rs.getString("productCode"));
 				dto.setProductName(rs.getString("productName"));
 				dto.setProductPrice(rs.getInt("productPrice"));
 				dto.setProductSubject(rs.getString("productSubject"));

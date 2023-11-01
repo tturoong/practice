@@ -208,13 +208,13 @@ public class ProductServlet extends MyServlet {
 		}
 
 		// JSP로 포워딩
-		viewPage(req, resp, "product/list.jsp");
+//		viewPage(req, resp, "product/list.jsp");
 	}
 	
 	protected void writeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 글쓰기 폼
 		req.setAttribute("mode", "write");
-		viewPage(req, resp, "product/write.jsp");
+//		viewPage(req, resp, "product/write.jsp");
 	}
 	
 	protected void writeSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -222,7 +222,7 @@ public class ProductServlet extends MyServlet {
 		ProductDAO dao = new ProductDAO();
 		
 		if (req.getMethod().equalsIgnoreCase("GET")) {
-			viewPage(req, resp, "redirect:/product/list.do");
+//			viewPage(req, resp, "redirect:/product/list.do");
 			return;
 		}
 		
@@ -248,7 +248,7 @@ public class ProductServlet extends MyServlet {
 			e.printStackTrace();
 		}
 
-		viewPage(req, resp, "redirect:/product/list.do");
+//		viewPage(req, resp, "redirect:/product/list.do");
 	}
 	/*
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -350,8 +350,7 @@ public class ProductServlet extends MyServlet {
 		resp.sendRedirect(cp + "/product/list.do?" + query);
 	}
 	*/
-	
-	protected void viewPage(HttpServletRequest req, HttpServletResponse resp, String cp) throws ServletException, IOException {
+	protected void viewPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 	}
 }

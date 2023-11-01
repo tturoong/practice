@@ -24,8 +24,8 @@ public class ProductDTO {
 	public String getProductCode() {
 		return productCode;
 	}
-	public void setProductCode(String productName, String breweryPage) {
-		this.productCode = productName + breweryPage;
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
 	}
 	public String getProductName() {
 		return productName;

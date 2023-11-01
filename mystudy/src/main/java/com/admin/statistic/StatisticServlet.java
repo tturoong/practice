@@ -99,9 +99,9 @@ public class StatisticServlet extends MyServlet {
 			e.printStackTrace();
 		}
 		
-
 		forward(req, resp,"/WEB-INF/views/statistic/registerGraph.jsp");
 
-	
 	}
+	
+	
 }

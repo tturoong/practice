@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.util.MyServlet;
 
-@WebServlet("/main.do")
+@WebServlet("/admin/main.do")
 public class MainServlet extends MyServlet {
 	private static final long serialVersionUID = 1L;
 	
