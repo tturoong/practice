@@ -99,7 +99,12 @@ public class StatisticServlet extends MyServlet {
 			e.printStackTrace();
 		}
 		
+<<<<<<< HEAD
 		forward(req, resp,"/WEB-INF/views/statistic/registerGraph.jsp");
+=======
+		forward(req, resp,"/WEB-INF/views/statistic/graph.jsp");
+		
+>>>>>>> refs/remotes/origin/master
 	}
 	
 	

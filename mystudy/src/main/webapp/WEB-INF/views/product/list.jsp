@@ -125,7 +125,7 @@ function deleteList() {
     		<tr>
     			<th>제품명</th>
     			<td>
-    				<input type="text" name="productName"value="${kwd}" class="form-control">
+    				<input type="text" name="productName"value="${productNameKwd}" class="form-control">
     			</td>
     		</tr>
     		<tr>
@@ -148,8 +148,8 @@ function deleteList() {
     		<tr>
     			<th>유통기한</th>
     			<td>
-    				<input type="date" name="expiredate" value="e1">~
-    				<input type="date" name="expiredate" value="e2">
+    				<input type="date" name="expirationDateStart" value="e1">~
+    				<input type="date" name="expirationDateEnd" value="e2">
     			</td>
     		</tr>
     		<tr>
