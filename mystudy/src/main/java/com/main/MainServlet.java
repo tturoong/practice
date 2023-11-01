@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.util.MyServlet;
-import com.util.MyUtil;
 
 @WebServlet("/main.do")
 public class MainServlet extends MyServlet {
@@ -32,17 +31,14 @@ public class MainServlet extends MyServlet {
 	protected void graph(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 그래프
 		MainDAO dao = new MainDAO();
-		MyUtil uil = new MyUtil();
 		String label = "";                                       
 		String data = "";
-		String cp = req.getContextPath();
-		
 		try {
 			List<MainDTO> list = dao.graph();
 			
 			for(MainDTO dto : list) {
 				if( list.indexOf(dto) == list.size()-1 ) {
-					System.out.println(dto.getmRegDate());
+					
 					break;
 				}
 				
