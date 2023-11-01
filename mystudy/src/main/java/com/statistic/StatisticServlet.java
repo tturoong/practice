@@ -2,6 +2,7 @@ package com.statistic;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -24,12 +25,21 @@ public class StatisticServlet extends MyServlet {
 		if(uri.indexOf("statistic.do") != -1) {
 
 			// forward(req,resp, "/WEB-INF/main.jsp");
+		} else if (uri.indexOf("sales.do") != -1) {
+//			판매 정산
+//			- 필터링 ( 기간별, 상품 카테고리별 )
+			
+		} else if(uri.indexOf("register.do") != -1) {
+			
+			
+			
 		} else {
-			graph(req, resp);
+			//회원가입자수 그래프
+			regDateGraph(req, resp);
 		}
 	} 
 	
-	protected void graph(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void regDateGraph(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		StatisticDAO dao = new StatisticDAO();
 		String cp = req.getContextPath();
 		String label = "";
@@ -89,7 +99,8 @@ public class StatisticServlet extends MyServlet {
 			e.printStackTrace();
 		}
 		
-		forward(req, resp,"/WEB-INF/views/main/graph.jsp");
-		
+		forward(req, resp,"/WEB-INF/views/statistic/registerGraph.jsp");
 	}
+	
+	
 }
