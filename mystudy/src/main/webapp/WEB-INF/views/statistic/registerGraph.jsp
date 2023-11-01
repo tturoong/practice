@@ -105,8 +105,6 @@ th, td { padding: 10px; }
 								<option value="2" ${ date == "2" ? "selected":"0"}>월별</option>
 								<option value="3" ${ date == "3" ? "selected":"0"}>연별</option>
 							</select>
-						</td>
-						<td>
 							<button type="submit" onclick="location.href='${pageContext.request.contextPath}/statistic/graph.do';"> 전송 </button>
 						</td>
 					</tr>
