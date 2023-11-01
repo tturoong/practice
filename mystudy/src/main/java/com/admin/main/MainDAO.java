@@ -1,4 +1,4 @@
-package com.main;
+package com.admin.main;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

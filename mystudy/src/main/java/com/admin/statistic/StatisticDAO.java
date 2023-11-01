@@ -1,4 +1,4 @@
-package com.statistic;
+package com.admin.statistic;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

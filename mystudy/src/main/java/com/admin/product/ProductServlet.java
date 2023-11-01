@@ -1,4 +1,4 @@
-package com.product;
+package com.admin.product;
 
 import java.io.IOException;
 
@@ -350,4 +350,8 @@ public class ProductServlet extends MyServlet {
 		resp.sendRedirect(cp + "/product/list.do?" + query);
 	}
 	*/
+	
+	protected void viewPage(HttpServletRequest req, HttpServletResponse resp, String cp) throws ServletException, IOException {
+		
+	}
 }

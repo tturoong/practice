@@ -1,4 +1,4 @@
-package com.statistic;
+package com.admin.statistic;
 
 public class StatisticDTO {
 	

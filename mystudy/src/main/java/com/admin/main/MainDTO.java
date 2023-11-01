@@ -1,4 +1,4 @@
-package com.main;
+package com.admin.main;
 
 public class MainDTO {
 
