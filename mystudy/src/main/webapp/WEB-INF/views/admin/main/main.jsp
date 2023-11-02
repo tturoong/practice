@@ -134,6 +134,10 @@ function modal() {
     		</tr>
     	</table>
     	
+    	<p>
+    		<a href="${pageContext.request.contextPath}/admin/member/list.do">회원관리</a>
+	</p>
+    	
     	<table class="dashbox">
     		<tr>
     			<th><i class="fa-solid fa-truck-fast"></i>&nbsp;주문관리</th>

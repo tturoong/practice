@@ -75,7 +75,7 @@ public class MainServlet extends MyServlet {
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
-		forward(req, resp, "/WEB-INF/views/main/main.jsp");
+		forward(req, resp, "/WEB-INF/views/admin/main/main.jsp");
 	}
 }
 
