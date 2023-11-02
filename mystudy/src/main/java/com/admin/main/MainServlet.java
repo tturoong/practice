@@ -25,6 +25,8 @@ public class MainServlet extends MyServlet {
 			
 		} else if (uri.indexOf("statistic.do") != -1) {
 			System.out.println("wrong way");
+		} else if(uri.indexOf("member.do") != -1) {
+			forward(req, resp, "/WEB-INF/views/admin/member/memberManage.jsp");
 		}
 	}
 	
