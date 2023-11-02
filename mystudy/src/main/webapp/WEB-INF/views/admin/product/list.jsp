@@ -200,27 +200,15 @@ function deleteList() {
 					<button type="button" class="btn" onclick="searchList();">검색</button>
 				</td>
 				<td width="100">
-					<button type="button" class="btn" onclick="">초기화</button>
+					<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/admin/product/list.do';">초기화</button>
 				</td>
 			</tr>    		
     	</table>
     </div>
     
     <div>
-		<table>
-			<tr align="right">
-				<td>
-					<button type="button" class="btn" onclick="">상품등록</button>
-				</td>
-				<td>
-					<button type="button" class="btn" onclick="">상품수정</button>
-				</td>
-				<td>
-					<button type="button" class="btn" onclick="deleteList()">상품삭제</button>
-				</td>
-			</tr>
-		</table>
-			
+		
+			<form>
 			<table class="table table-border table-list">
 				<thead>
 					<tr>
@@ -244,7 +232,7 @@ function deleteList() {
 						<th class="recommended">대상</th>
 						<th class="inventory">재고</th>
 						<th class="extinctornot">단종여부</th>
-						
+						<th class="update">수정</th>
 					</tr>
 				</thead>
 				
@@ -269,7 +257,9 @@ function deleteList() {
 							<td>${dto.productPerson}</td>
 							<td>${dto.inventory}</td>
 							<td>${dto.extinctOrNot}</td>
-							
+							<td>
+								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/admin/product/update.do';">수정</button>
+							</td>
 							
 							 
 							<%-- <td class="left">
@@ -281,6 +271,19 @@ function deleteList() {
 						</tr>
 					</c:forEach>
 				</tbody>
+			</table>
+			</form>
+			
+			<table>
+			<tr align="right">
+				<td>
+					<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/admin/product/write.do';">상품등록</button>
+				</td>
+				
+				<td>
+					<button type="button" class="btn" onclick="deleteList()">상품삭제</button>
+				</td>
+			</tr>
 			</table>
 			
 		<div class="page-navigation">

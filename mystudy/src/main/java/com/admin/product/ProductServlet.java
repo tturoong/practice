@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.util.MyServlet;
 import com.util.MyUtil;
 
-@WebServlet("/product/*")
+@WebServlet("/admin/product/*")
 public class ProductServlet extends MyServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -173,7 +173,7 @@ public class ProductServlet extends MyServlet {
 			*/
 			
 			// 페이징 처리
-			String listUrl = cp + "/product/list.do";
+			String listUrl = cp + "/admin/product/list.do";
 			//String articleUrl = cp + "/bbs/article.do?page=" + current_page;
 			/*
 			if (query.length() != 0) {
@@ -214,7 +214,8 @@ public class ProductServlet extends MyServlet {
 	protected void writeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 글쓰기 폼
 		req.setAttribute("mode", "write");
-//		viewPage(req, resp, "product/write.jsp");
+		forward(req, resp, "/WEB-INF/views/admin/product/write.jsp");
+		
 	}
 	
 	protected void writeSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -222,7 +223,7 @@ public class ProductServlet extends MyServlet {
 		ProductDAO dao = new ProductDAO();
 		
 		if (req.getMethod().equalsIgnoreCase("GET")) {
-//			viewPage(req, resp, "redirect:/product/list.do");
+			viewPage(req, resp, "redirect:/admin/product/list.do");
 			return;
 		}
 		
@@ -248,7 +249,7 @@ public class ProductServlet extends MyServlet {
 			e.printStackTrace();
 		}
 
-//		viewPage(req, resp, "redirect:/product/list.do");
+		viewPage(req, resp, "redirect:/admin/product/list.do");
 	}
 	/*
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -350,7 +351,7 @@ public class ProductServlet extends MyServlet {
 		resp.sendRedirect(cp + "/product/list.do?" + query);
 	}
 	*/
-	protected void viewPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void viewPage(HttpServletRequest req, HttpServletResponse resp, String string) throws ServletException, IOException {
 		
 	}
 }

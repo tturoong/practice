@@ -34,7 +34,9 @@ function modal() {
 }
 
 function sendOk() {
-    const f = document.boardForm;
+    
+	const f = document.writeForm;
+	/*
 	let str;
 	
     str = f.subject.value.trim();
@@ -50,8 +52,8 @@ function sendOk() {
         f.content.focus();
         return;
     }
-
-    f.action = "${pageContext.request.contextPath}/bbs/${mode}_ok.do";
+*/
+    f.action = "${pageContext.request.contextPath}/admin/product/${mode}_ok.do";
     f.submit();
 }
 
@@ -111,12 +113,14 @@ function sendOk() {
 	
 	<form name="insaForm" action="insa_ok.jsp" method="post">
 	<table class="table table-form">
+	<!-- 
 		<tr>
 			<td>제품코드</td>
 			<td>
 				<input type="text" name="code" class="form-control">
 			</td>
 		</tr>
+		 -->
 		<tr>
 			<td>제품명</td>
 			<td>
