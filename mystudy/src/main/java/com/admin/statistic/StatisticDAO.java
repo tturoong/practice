@@ -244,7 +244,8 @@ public class StatisticDAO {
 	            
 	            String start = currentYear + "-" + startMonth + "-" + startDayOfMonth;
 				String last = currentYear + "-" + currentMonth + "-" + currentDayOfMonth;
-
+				System.out.println(start);
+				System.out.println(last);
 				pstmt = conn.prepareStatement(sb.toString());
 				
 				
@@ -306,6 +307,8 @@ public class StatisticDAO {
 				String start = currentYear + "-" + startMonth + "-" + currentDayOfMonth;
 			
 				pstmt = conn.prepareStatement(sb.toString());
+				
+				
 				
 				pstmt.setString(1, start);
 				pstmt.setString(2, last);

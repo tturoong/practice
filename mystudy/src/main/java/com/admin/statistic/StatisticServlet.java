@@ -131,10 +131,10 @@ public class StatisticServlet extends MyServlet {
 			 
 			
 			for(StatisticDTO dto: list) {
-//				if( list.indexOf(dto) == list.size()) {
-//					
-//					break;
-//				}
+				if( list.indexOf(dto) == list.size()-1 && count == 1) {
+					
+					break;
+				}
 				
 				
 				
