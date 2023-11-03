@@ -57,12 +57,14 @@ public class ProductDTO {
 	public void setProductStorage(String productStorage) {
 		this.productStorage = productStorage;
 	}
+	
 	public String getBreweryPage() {
 		return breweryPage;
 	}
 	public void setBreweryPage(String breweryPage) {
 		this.breweryPage = breweryPage;
 	}
+	
 	public String getProductCategory() {
 		return productCategory;
 	}

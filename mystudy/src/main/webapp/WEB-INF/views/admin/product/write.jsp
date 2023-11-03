@@ -57,6 +57,7 @@ function sendOk() {
     f.submit();
 }
 
+
 </script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.2/css/all.css">
 </head>
@@ -111,115 +112,122 @@ function sendOk() {
     </div>
     
 	
-	<form name="insaForm" action="insa_ok.jsp" method="post">
+	<form name="writeForm" method="post" enctype="multipart/form-data">
 	<table class="table table-form">
 	<!-- 
 		<tr>
 			<td>제품코드</td>
 			<td>
-				<input type="text" name="code" class="form-control">
+				<input type="text" name="productCode" class="form-control">
 			</td>
 		</tr>
 		 -->
 		<tr>
 			<td>제품명</td>
 			<td>
-				<input type="text" name="name" class="form-control">
-			</td>
-		</tr>
-		<tr>
-			<td>사진</td>
-			<td>
-				<input type="file" name="img" class="form-control">
+				<input type="text" name="productName" class="form-control" value="${dto.productName}">
 			</td>
 		</tr>
 		<tr>
 			<td>가격</td>
 			<td>
-				<input type="text" name="price" class="form-control">
-			</td>
-		</tr>
-		<tr>
-			<td>용량</td>
-			<td>
-				<input type="text" name="volume" class="form-control">
-			</td>
-		</tr>
-		<tr>
-			<td>양조장</td>
-			<td>
-				<input type="text" name="brewery" class="form-control">
+				<input type="text" name="productPrice" class="form-control" value="${dto.productPrice}">
 			</td>
 		</tr>
 		<tr>
 			<td>설명</td>
 			<td>
-				<input type="text" name="subject" class="form-control">
+				<input type="text" name="productSubject" class="form-control" value="${dto.productSubject}">
 			</td>
 		</tr>
 		<tr>
 			<td>유통기한</td>
 			<td>
-				<input type="text" name="exdate" class="form-control">
+				<input type="text" name="expirationDate" class="form-control" value="${dto.expirationDate}">
 			</td>
 		</tr>
 		<tr>
 			<td>저장방법</td>
 			<td>
-				<input type="text" name="storage" class="form-control">
+				<input type="text" name="productStorage" class="form-control" value="${dto.productStorage}">
 			</td>
 		</tr>
 		<tr>
 			<td>주종</td>
 			<td>
-				<input type="radio" name="category"  checked>탁주&nbsp;
-				<input type="radio" name="category" >약주,청주&nbsp;
-				<input type="radio" name="category" >과실주&nbsp;
-				<input type="radio" name="category" >증류주&nbsp;
-				<input type="radio" name="category" >기타주류&nbsp;
+				<input type="radio" name="productCategory" value="탁주"  checked>탁주&nbsp;
+				<input type="radio" name="productCategory" value="약주,청주">약주,청주&nbsp;
+				<input type="radio" name="productCategory" value="과실주">과실주&nbsp;
+				<input type="radio" name="productCategory" value="증류주">증류주&nbsp;
+				<input type="radio" name="productCategory" value="기타주류">기타주류&nbsp;
 			</td>
 		</tr>
 		<tr>
 			<td>해쉬태그</td>
 			<td>
-				<input type="text" name="hashtag" class="form-control">
+				<input type="text" name="hashTag" class="form-control" value="${dto.hashTag}">
 			</td>
 		</tr>
 		<tr>
 			<td>도수</td>
 			<td>
-				<input type="text" name="alcohol" class="form-control">
+				<input type="text" name="alcoholPercent" class="form-control" value="${dto.alcoholPercent}">
 			</td>
 		</tr>
 		<tr>
 			<td>맛</td>
 			<td>
-				<input type="radio" name="taste" checked>단맛&nbsp;
-				<input type="radio" name="taste">신맛&nbsp;
-				<input type="radio" name="taste">쓴맛&nbsp;
-				<input type="radio" name="taste">탄산&nbsp;
+				<input type="radio" name="productTaste" value="단맛" checked>단맛&nbsp;
+				<input type="radio" name="productTaste" value="신맛">신맛&nbsp;
+				<input type="radio" name="productTaste" value="쓴맛">쓴맛&nbsp;
+				<input type="radio" name="productTaste" value="탄산">탄산&nbsp;
 			</td>
 		</tr>
 		<tr>
 			<td>대상</td>
 			<td>
-				<input type="radio" name="recommended" checked>웃어른&nbsp;
-				<input type="radio" name="recommended" >연인&nbsp;
-				<input type="radio" name="recommended" >친구&nbsp;
-				<input type="radio" name="recommended" >혼자&nbsp;
-				<input type="radio" name="recommended" >비즈니스&nbsp;
+				<input type="radio" name="productPerson" value="웃어른" checked>웃어른&nbsp;
+				<input type="radio" name="productPerson" value="연인">연인&nbsp;
+				<input type="radio" name="productPerson" value="친구">친구&nbsp;
+				<input type="radio" name="productPerson" value="혼자">혼자&nbsp;
+				<input type="radio" name="productPerson" value="비즈니스">비즈니스&nbsp;
 			</td>
 		</tr>
 		<tr>
 			<td>재고</td>
 			<td>
-				<input type="text" name="inventory" class="form-control">
+				<input type="text" name="inventory" class="form-control" value="${dto.inventory}">
+			</td>
+		</tr>
+		<tr>
+			<td>사진</td>
+			<td>
+				<!-- <input type="text" name="image" class="form-control" value="${dto.image}">  -->
+				 
 			</td>
 		</tr>
 		<tr>
 			<td>단종여부</td>
 			<td>
-				<input type="text" name="extinctornot" class="form-control">
+				<input type="text" name="extinctOrNot" class="form-control" value="${dto.extinctOrNot}">
+			</td>
+		</tr>
+		<tr>
+			<td>원가</td>
+			<td>
+				<input type="text" name="price" class="form-control" value="${dto.price}">
+			</td>
+		</tr>
+		<tr>
+			<td>용량</td>
+			<td>
+				<input type="text" name="volume" class="form-control" value="${dto.volume}">
+			</td>
+		</tr>
+		<tr>
+			<td>양조장홈페이지</td>
+			<td>
+				<input type="text" name="breweryPage" class="form-control" value="${dto.breweryPage}">
 			</td>
 		</tr>
 		

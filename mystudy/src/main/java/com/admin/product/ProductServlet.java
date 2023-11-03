@@ -7,16 +7,19 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
 import com.util.MyServlet;
+import com.util.MyUploadServlet;
 import com.util.MyUtil;
 
 @WebServlet("/admin/product/*")
-public class ProductServlet extends MyServlet {
+@MultipartConfig
+public class ProductServlet extends MyUploadServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -80,8 +83,47 @@ public class ProductServlet extends MyServlet {
 			String[] productTasteKwd = req.getParameterValues("taste");
 
 			// 전체 데이터 개수
+			
+			List<String> productPriceKwdlist = new ArrayList<String>();
+			if(productPriceKwd != null ) {
+				for(String s : productPriceKwd) {
+					productPriceKwdlist.add(s);
+				}
+			}
+			
+			List<String> volumeKwdlist = new ArrayList<String>();
+			if(volumeKwd != null) {
+				for(String s : volumeKwd) {
+					volumeKwdlist.add(s);
+				}
+			}
+			
+			
+			List<String> productCategoryKwdlist = new ArrayList<String>();
+			if(productCategoryKwd != null) {
+				for(String s : productCategoryKwd) {
+					productCategoryKwdlist.add(s);
+				}
+			}
+			
+			List<String> alcoholPercentKwdlist = new ArrayList<String>();
+			if(alcoholPercentKwd != null) {
+				for(String s : alcoholPercentKwd) {
+					alcoholPercentKwdlist.add(s);
+				}
+			}
+			
+			List<String> productTasteKwdlist = new ArrayList<String>();
+			if(productTasteKwd != null) {
+				for(String s : productTasteKwd) {
+					productTasteKwdlist.add(s);
+				}
+			}
+			
+			
 			int dataCount;
-			if (productNameKwd == null
+
+			if( productNameKwd == null
 					&& productPriceKwd == null
 					&& volumeKwd == null
 					&& expirationDateStart == null
@@ -92,10 +134,12 @@ public class ProductServlet extends MyServlet {
 				dataCount = dao.dataCount();
 			} else {
 				
-				dataCount = dao.dataCount(productNameKwd, Arrays.asList(productPriceKwd), Arrays.asList(volumeKwd), 
-						expirationDateStart, expirationDateEnd,Arrays.asList(productCategoryKwd),
-						Arrays.asList(alcoholPercentKwd), Arrays.asList(productTasteKwd));
+				dataCount = dao.dataCount(productNameKwd, productPriceKwdlist, volumeKwdlist, 
+						expirationDateStart, expirationDateEnd, productCategoryKwdlist,
+						alcoholPercentKwdlist, productTasteKwdlist);
 			}
+			
+			
 			
 			// 전체 페이지 수
 			int size = 10;
@@ -123,41 +167,7 @@ public class ProductServlet extends MyServlet {
 				// List<String> kwdlist = new ArrayList<String>();
 				// System.out.println(productTasteKwd.getClass());
 				
-				List<String> productPriceKwdlist = new ArrayList<String>();
-				if(productPriceKwd != null) {
-					for(String s : productPriceKwd) {
-						productPriceKwdlist.add(s);
-					}
-				}
 				
-				List<String> volumeKwdlist = new ArrayList<String>();
-				if(volumeKwd != null) {
-					for(String s : volumeKwd) {
-						volumeKwdlist.add(s);
-					}
-				}
-				
-				
-				List<String> productCategoryKwdlist = new ArrayList<String>();
-				if(productCategoryKwd != null) {
-					for(String s : productCategoryKwd) {
-						productCategoryKwdlist.add(s);
-					}
-				}
-				
-				List<String> alcoholPercentKwdlist = new ArrayList<String>();
-				if(alcoholPercentKwd != null) {
-					for(String s : alcoholPercentKwd) {
-						alcoholPercentKwdlist.add(s);
-					}
-				}
-				
-				List<String> productTasteKwdlist = new ArrayList<String>();
-				if(productTasteKwd != null) {
-					for(String s : productTasteKwd) {
-						productTasteKwdlist.add(s);
-					}
-				}
 				
 				list = dao.listProduct(offset, size, productNameKwd, productPriceKwdlist, volumeKwdlist, 
 						expirationDateStart, expirationDateEnd, productCategoryKwdlist,
@@ -220,36 +230,61 @@ public class ProductServlet extends MyServlet {
 	
 	protected void writeSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 글 저장
+		String cp = req.getContextPath();
 		ProductDAO dao = new ProductDAO();
 		
+		/*
 		if (req.getMethod().equalsIgnoreCase("GET")) {
 			viewPage(req, resp, "redirect:/admin/product/list.do");
 			return;
 		}
-		
+		*/
 		try {
 			ProductDTO dto = new ProductDTO();
 
 			// 파라미터
 			dto.setProductName(req.getParameter("productName"));
+			
+			if(req.getParameter("productPrice") != null) {
 			dto.setProductPrice(Integer.parseInt(req.getParameter("productPrice")));
+			}
 			dto.setProductSubject(req.getParameter("productSubject"));
 			dto.setExpirationDate(req.getParameter("expirationDate"));
-			dto.setBreweryPage(req.getParameter("breweryPage"));
+			dto.setProductStorage(req.getParameter("productStorage"));
 			dto.setProductCategory(req.getParameter("productCategory"));
-			dto.setHashTag(req.getParameter("hashtag"));
+			
+			dto.setHashTag(req.getParameter("hashTag"));
+			
+			if(req.getParameter("alcoholPercent") != null) {
 			dto.setAlcoholPercent(Double.parseDouble(req.getParameter("alcoholPercent")));
+			
+			}
+			
 			dto.setProductTaste(req.getParameter("productTaste"));
+			
 			dto.setProductPerson(req.getParameter("productPerson"));
 			dto.setInventory(Integer.parseInt(req.getParameter("inventory")));
+			
 			dto.setImage(req.getParameter("image"));
+			
+			if(req.getParameter("extinctOrNot") != null) {
+			dto.setExtinctOrNot(Integer.parseInt(req.getParameter("extinctOrNot")));
+			}
+			if(req.getParameter("price") != null) {
+			dto.setPrice(Integer.parseInt(req.getParameter("price")));
+			}
+			if(req.getParameter("volume") != null) {
+			dto.setVolume(Integer.parseInt(req.getParameter("volume")));
+			}
+			
+			dto.setBreweryPage(req.getParameter("breweryPage"));
 
 			dao.insertProduct(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		viewPage(req, resp, "redirect:/admin/product/list.do");
+		resp.sendRedirect(cp + "/admin/product/list.do");
+		// viewPage(req, resp, "redirect:/admin/product/list.do");
 	}
 	/*
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
